@@ -14,7 +14,7 @@
         .container{
             align-items: center;
             background-color: rgb(199, 199, 199);
-            width: 20%;            
+            width: 25%;            
             padding: 15px;
         }
 
@@ -44,6 +44,7 @@
             border-radius: 10px;
             font-size: 15px;
             font-weight: 700;
+            margin-left: 9rem;
         }
 
         button:hover{
@@ -56,14 +57,16 @@
         <div class="form-box">
             <h1>Login Page</h1>
             <form action="/login" method="post">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
 
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
 
                 <button>Submit</button>
             </form>
+
+            <h3>New User?<a href="/signup"> Sign up</a></h3>
         </div>
     </div>
 
