@@ -2,6 +2,7 @@ const express = require("express");
 const db = require("./config");
 const bodyParser = require("body-parser");
 const path= require("path");
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -17,18 +18,21 @@ app.get('/signup', (req,res) =>{
     res.sendFile(path.join(__dirname, '/public/signup.html'));
 });
 
-app.post('/signup', (req,res) => {
+app.post('/signup', async (req,res) => {
     const { email,name, password } = req.body;
 
-        const query = 'SELECT * FROM users WHERE email = ?';
-        db.query(query, email, (err, results) => {
-          if (err) throw err;
-      
-          if (results.length > 0) {
+    // Hash the password using bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const query = 'SELECT * FROM users WHERE email = ?';
+    db.query(query, email, (err, results) => {
+        if (err) throw err;      
+        if (results.length > 0) {
             res.redirect('/login');
-          } else {
+        } 
+        else {
             const q = 'INSERT INTO users (email, name, password) VALUES (?, ?, ?)';
-            db.query(q, [email,name, password], (err, result) => {
+            db.query(q, [email,name, hashedPassword], (err, result) => {
                 if (err) {
                     console.error('MySQL query error:', err);
                     return res.status(500).sendFile(path.join(__dirname, '/public/error.html'));
@@ -50,18 +54,29 @@ app.post('/login', (req, res) => {
     const password = req.body.password;
   
     // Check credentials in the database
-    const query = 'SELECT * FROM users WHERE email = ? AND password = ?';
-    db.query(query, [email, password], (err, results) => {
+    const query = 'SELECT * FROM users WHERE email = ?';
+    db.query(query, [email], async (err, results) => {
       if (err) throw err;
   
-      if (results.length > 0) {
-        res.sendFile(path.join(__dirname, 'public/expensePage.html'));
-      } else {
-        res.send(`
-        <h1>Invalid email or password</h1>
-        <a href="/login">Login</a>
-        `);
+      else{
+        if (results.length > 0) {
+            const hashedPassword = results[0].password;
+    
+            // Compare the entered password with the hashed password using bcrypt
+            const passwordMatch = await bcrypt.compare(password, hashedPassword);
+    
+            if (passwordMatch) {
+                res.sendFile(path.join(__dirname, 'public/expensePage.html'));
+            } else {
+              res.send('Invalid username or password');
+            }
+          } 
+          
+          else {
+            res.send('Invalid username or password');
+          }
       }
+
     });
   });
 
