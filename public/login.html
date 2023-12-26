@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container{
+            align-items: center;
+            background-color: rgb(199, 199, 199);
+            width: 20%;            
+            padding: 15px;
+        }
+
+        .form-box{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form{
+            margin: 10px;
+        }
+        form label{
+            font-size: 20px;
+            font-weight: 700;
+            margin: 10px;
+        }
+        form input{
+            padding: 6px;
+            margin: 10px;
+            border-radius: 10px;
+        }
+
+        button{
+            margin: 10px;
+            padding: 6px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        button:hover{
+            background-color: rgb(170, 166, 166);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h1>Login Page</h1>
+            <form action="/login" method="post">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+
+                <button>Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
