@@ -27,7 +27,7 @@ app.post('/signup', (req,res) => {
             }
 
             console.log('User registered successfully');
-            res.send('User registered successfully');
+            res.sendFile(path.join(__dirname, 'public/expensePage.html'));
         });
 });
 
@@ -35,21 +35,24 @@ app.get('/login', (req,res) =>{
     res.sendFile(path.join(__dirname, '/public/login.html'));
 });
 
-app.post('/login', (req,res) => {
-    // const { username, password } = req.body;
-
-    // // Insert user into the database
-    // const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
-    // db.query(query, [username, password], (err, result) => {
-    //     if (err) {
-    //         console.error('MySQL query error:', err);
-    //         return res.status(500).sendFile(path.join(__dirname, '/public/error.html'));
-    //     }
-
-    //     console.log('User registered successfully');
-    //     res.send('User registered successfully');
-    // });
-    res.sendFile(path.join(__dirname , 'public/error.html'));
-});
+app.post('/login', (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+  
+    // Check credentials in the database
+    const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+    db.query(query, [username, password], (err, results) => {
+      if (err) throw err;
+  
+      if (results.length > 0) {
+        res.sendFile(path.join(__dirname, 'public/expensePage.html'));
+      } else {
+        res.send(`
+        <h1>Invalid Username or password</h1>
+        <a href="/login">Login</a>
+        `);
+      }
+    });
+  });
 
 app.listen("3000");
