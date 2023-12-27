@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 
 const app = express();
 
-
 // ----------------------------------------LOGIN API --------------------------------------------------------------------
 
 const getLogin = app.get('/login', (req,res) =>{

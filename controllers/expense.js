@@ -28,10 +28,6 @@ const postExpense = app.post('/expense/:id', (req,res) =>{
 
 const delExpense = app.post('/deleteExpense/:id', (req,res) => {
     const delId = req.params.id;
-    // db.query("DELETE FROM expenses WHERE id=?", delId, (err, result) => {
-    //     if(err ) throw err;
-    //     res.redirect('/expense/');
-    // })
 
     db.query("SELECT user_id FROM expenses where id=?",delId, (err, result) => {
         const user_id = result[0].user_id;
