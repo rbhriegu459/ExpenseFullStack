@@ -32,8 +32,9 @@ const postSignup = app.post('/signup', async (req,res) => {
                 }
 
                 console.log('User registered successfully');
-                // res.sendFile(path.join(__dirname, '../public/expensePage.html'));
-                res.redirect("/expense");
+                db.query("SELECT id FROM users where email=?", [email], (errs, ress) =>{
+                    res.redirect(`/expense/${ress[0].id}`);
+                })
             });
           }
         });

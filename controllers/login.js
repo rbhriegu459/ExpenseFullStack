@@ -18,6 +18,7 @@ const postLogin = app.post('/login', (req, res) => {
   
     // Check credentials in the database
     const query = 'SELECT * FROM users WHERE email = ?';
+
     db.query(query, [email], async (err, results) => {
       if (err) throw err;
   
@@ -29,7 +30,7 @@ const postLogin = app.post('/login', (req, res) => {
             const passwordMatch = await bcrypt.compare(password, hashedPassword);
     
             if (passwordMatch) {
-                res.redirect('/expense');
+                res.redirect(`/expense/${results[0].id}`);
             } else {
               res.send('Invalid username or password');
             }

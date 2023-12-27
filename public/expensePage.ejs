@@ -4,46 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
+
+    <style>
+        body{
+            /* background-color: rgb(223, 238, 177); */
+            background-color: #5CDB95;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+        .navBar{
+            width: 100%;
+            background-color: #379683;
+            padding: 10px;
+            display: flex;
+            flex-direction: row-reverse;
+        }
+        .navBar a{
+            margin-right: 30px;
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+        }
+        .navBar a:hover{
+            color: #05386B;
+        }
+        .main{
+            display: flex;
+            flex-direction: row;
+        }
+        form{
+            padding: 6px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+        form input, form select{
+            padding: 4px;
+            border-radius: 10px;
+            margin: 5px 10px;
+            width: 60%;
+        }
+        .container{
+            margin-top: 30px;
+            margin-right: 80px;
+            background-color: #05386B;
+            padding: 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            box-shadow: 10px 10px 8px #b6d970;
+        }
+        table,tr,td,th{
+            padding: 8px;
+            border: 1.5px solid black;
+            border-collapse: collapse;
+            background-color: #05386B;
+            color: white;
+        }
+        th{
+            font-size: 20px;
+        }
+        td{
+            font-size: 18px;
+        }
+        .delBtn{
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            background-color: #8EE4AF;
+            border-radius: 10px;
+            padding: 3px;
+        }
+        .submitBtn{
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            background-color: #8EE4AF;
+            border-radius: 10px;
+            padding: 6px;
+        }
+        button:hover{
+            background-color: #379683;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Welcome to our Expense Tracker App!</h1>
-        <form action="/expense" method="post">
-            <label for="amount">Choose expense amount:</label>
-            <input type="number" name="amount" id="amount" required>
-
-            <label for="description">Write Description:</label>
-            <input type="text" name="description" id="description">
-
-            <label for="category">Choose Category:</label>
-            <select name="category" id="category">
-                <option value="fuel">Fuel</option>
-                <option value="ration">Ration</option>
-                <option value="food">Food</option>
-                <option value="electricity">Electricity</option>
-                <option value="movie">Movie</option>
-                <option value="shopping">Shopping</option>
-            </select>
-
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-
-    <div>
-        <h1>List of expenses</h1>
-        <ol id="listItem">
-            <% expenses.forEach(expense => {%>
-                <li>
-                    <div>
-                        <%= expense.description %> - <%= expense.amount %> - <%= expense.category%> 
-                        <form action="/deleteExpense/<%= expense.id%>" method="post">
-                            <button type="submit">DELETE</button>
-                          </form>
-                      </div>
-                </li>
-            <% }); %>
-        </ol>
-
+    <nav class="navBar">
+        <a href="/">Logout</a>
+    </nav>
+    <h1>Welcome to our Expense Tracker App!</h1>
+    <div class="main">
+        <div class="container">
+            <form action="/expense/<%= user_id %>" method="post">
+                <label for="amount">Choose expense amount:</label>
+                <input type="number" name="amount" id="amount" required>
+                <br>
+                <label for="description">Write Description:</label>
+                <input type="text" name="description" id="description">
+                <br>
+                <label for="category">Choose Category:</label>
+                <select name="category" id="category">
+                    <option value="fuel">Fuel</option>
+                    <option value="ration">Ration</option>
+                    <option value="food">Food</option>
+                    <option value="electricity">Electricity</option>
+                    <option value="movie">Movie</option>
+                    <option value="shopping">Shopping</option>
+                </select>
+                <br>
+                <button type="submit" class="submitBtn">Submit</button>
+            </form>
+        </div>
+    
+        <div>
+            <h2>List of expenses</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Delete</th>
+                    </tr>
+                    <tbody>
+                        <% expenses.forEach(expense => {%>
+                        <tr>
+                            <td><%= expense.description %></td>
+                            <td><%= expense.amount %></td>
+                            <td><%= expense.category%></td>
+                            <td>
+                                <form action="/deleteExpense/<%= expense.id%>" method="post">
+                                    <button type="submit" class="delBtn">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </thead>
+            </table>
+    
+        </div>
     </div>
 </body>
 </html>

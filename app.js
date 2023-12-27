@@ -26,8 +26,8 @@ app.get("/login", loginController.getLogin);
 app.post("/login", loginController.postLogin);
 
 // expense API call
-app.get("/expense", expenseController.getExpense);
-app.post("/expense", expenseController.postExpense);
+app.get("/expense/:id", expenseController.getExpense);
+app.post("/expense/:id", expenseController.postExpense);
 app.post("/deleteExpense/:id", expenseController.delExpense);
 
 app.listen("3000");
