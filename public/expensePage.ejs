@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to our Expense Tracker App!</h1>
+        <form action="/expense" method="post">
+            <label for="amount">Choose expense amount:</label>
+            <input type="number" name="amount" id="amount" required>
+
+            <label for="description">Write Description:</label>
+            <input type="text" name="description" id="description">
+
+            <label for="category">Choose Category:</label>
+            <select name="category" id="category">
+                <option value="fuel">Fuel</option>
+                <option value="ration">Ration</option>
+                <option value="food">Food</option>
+                <option value="electricity">Electricity</option>
+                <option value="movie">Movie</option>
+                <option value="shopping">Shopping</option>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div>
+        <h1>List of expenses</h1>
+        <ol id="listItem">
+            <% expenses.forEach(expense => {%>
+                <li>
+                    <div>
+                        <%= expense.description %> - <%= expense.amount %> - <%= expense.category%> 
+                        <form action="/deleteExpense/<%= expense.id%>" method="post">
+                            <button type="submit">DELETE</button>
+                          </form>
+                      </div>
+                </li>
+            <% }); %>
+        </ol>
+
+    </div>
+</body>
+</html>
