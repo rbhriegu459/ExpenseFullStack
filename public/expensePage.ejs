@@ -96,13 +96,14 @@
 
 <body>
     <nav class="navBar">
-        <a href="">Buy Permium</a>
-        <a href="/">Logout</a>
+        <a href="" id="buyPremiumBtn">Buy Permium</a>
+        <a href="/" >Logout</a>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     </nav>
     <h1>Welcome to our Expense Tracker App!</h1>
     <div class="main">
         <div class="container">
-            <form action="/expense/<%= user_id %>" method="post">
+            <form action="/expense/<%= userId %>" method="post">
                 <label for="amount">Choose expense amount:</label>
                 <input type="number" name="amount" id="amount" required>
                 <br>
@@ -152,5 +153,56 @@
     
         </div>
     </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const buyPremiumBtn = document.getElementById('buyPremiumBtn');
+    
+          buyPremiumBtn.addEventListener('click', function() {
+            // Replace this with your actual endpoint for buying premium
+            const buyPremiumEndpoint = '/buyPremium';
+            const amount=25;
+    
+            fetch(buyPremiumEndpoint, {
+              method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+              const { orderId, amount } = data;
+    
+              // Initialize Razorpay Checkout
+              const options = {
+                key: 'YOUR_RAZORPAY_KEY_ID',
+                amount,
+                currency: 'INR',
+                name: 'Rishita',
+                description: 'Premium Account Purchase',
+                order_id: orderId,
+                handler: function(response) {
+                  // Handle successful payment response if needed
+                  console.log(response);
+                },
+                // prefill: {
+                //   name: 'User Name',
+                //   email: 'user@example.com',
+                //   contact: '1234567890',
+                // },
+                theme: {
+                  color: '#3399cc',
+                },
+              };
+    
+              const rzp = new Razorpay(options);
+              rzp.open();
+            })
+            .catch(error => {
+              console.error(error);
+              alert('An error occurred.');
+            });
+          });
+        });
+      </script>
 </body>
 </html>
