@@ -2,6 +2,7 @@ const express = require("express");
 const path= require("path");
 const sequelize = require('../util/database');
 const Expense = require("../models/expense");
+const { where } = require("sequelize");
 
 
 const app = express();
@@ -60,12 +61,25 @@ const postExpense = async (req,res) =>{
 const delExpense = async (req,res) => {
     try{
         const delId = req.params.id;
+        const userId = await Expense.findOne({where: {id:delId}});
+        console.log(userId.userId);
         await Expense.destroy({where: {id:delId}});
-        res.redirect(`/expense/${id}`);
+        res.redirect(`/expense/${userId.userId}`);
     } catch(err){
         console.error('Unable to delete Expense the database', err);
         res.status(500).json({error: 'Internal Server Error'});
     }
 }
 
-module.exports = {getExpense, postExpense, delExpense};
+const totalExpense = async (req,res) =>{
+    try{
+        const user_id=  req.params.id;
+        const total_expense = await Expense.sum('amount', {where:{userId: user_id}});
+        res.status(200).json({totalExpense: total_expense});
+    } catch(err){
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+module.exports = {getExpense, postExpense, delExpense, totalExpense}; 

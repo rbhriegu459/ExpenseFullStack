@@ -12,8 +12,6 @@ const expenseController = require("./controllers/expense");
 const Expense = require("./models/expense");
 const User = require("./models/user");
 
-
-
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -37,17 +35,40 @@ app.post("/login", loginController.postLogin);
 app.get("/expense/:id", expenseController.getExpense);
 app.post("/expense/:id", expenseController.postExpense);
 app.post("/deleteExpense/:id", expenseController.delExpense);
+app.post('/totalExpense', expenseController.totalExpense);
+
+
+// IMPLEMENTING RAZORPAY
+const Payment = require('./models/order');
+
+const razorpay = new Razorpay({
+    key_id: 'rzp_test_w9RAuqqQaVeilM',
+    key_secret: 'yviui68I1jfo1BBXkreL8i1k',
+  });
+  
+  // Handle Razorpay payment success callback
+  app.post('/razorpay/callback', async (req, res) => {
+    // Verify the webhook signature (optional but recommended)
+    const attributes = req.body;
+  
+    // Save payment details to the database
+    await Payment.create({
+      orderId: attributes.payload.payment.entity.orderId,
+      amount: attributes.payload.payment.entity.amount,
+      // Save other fields as needed
+    });
+  
+    res.sendStatus(200);
+  });
+
 
 
 sequelize.sync()
 .then(result=>{
-    app.listen(3000, ()=>{
-            console.log("Server running");
+    app.listen(4000, ()=>{
+      console.log("Server running");
     })
 }) 
 .catch((err)=>{
     console.log("Database Error setting Sequelize",err);
-})
-
-
-// app.listen("3000");
+});
